@@ -1,0 +1,54 @@
+{
+  "_comment": "LESSON 7 FIX: Replace wildcard resource permissions on DVSA-SEND-RECEIPT-EMAIL with exact ARNs. Replace ACCOUNT_ID with your real AWS account ID.",
+
+  "S3_Policy_BEFORE": {
+    "_note": "REMOVE this — grants access to ALL S3 buckets",
+    "Action": ["s3:GetObject","s3:ListBucket","s3:GetBucketLocation","s3:GetObjectVersion",
+               "s3:PutObject","s3:PutObjectAcl","s3:GetLifecycleConfiguration",
+               "s3:PutLifecycleConfiguration","s3:DeleteObject"],
+    "Resource": ["arn:aws:s3:::*", "arn:aws:s3:::*/*"],
+    "Effect": "Allow"
+  },
+
+  "S3_Policy_AFTER": {
+    "_note": "REPLACE with — grants access to ONLY the DVSA receipts bucket",
+    "Action": ["s3:GetObject", "s3:PutObject", "s3:ListBucket"],
+    "Resource": [
+      "arn:aws:s3:::dvsa-receipts-bucket-ACCOUNT_ID-us-east-1",
+      "arn:aws:s3:::dvsa-receipts-bucket-ACCOUNT_ID-us-east-1/*"
+    ],
+    "Effect": "Allow"
+  },
+
+  "DynamoDB_Policy_BEFORE": {
+    "_note": "REMOVE this — grants access to ALL DynamoDB tables",
+    "Action": ["dynamodb:GetItem","dynamodb:DeleteItem","dynamodb:PutItem","dynamodb:Scan",
+               "dynamodb:Query","dynamodb:UpdateItem","dynamodb:BatchWriteItem",
+               "dynamodb:BatchGetItem","dynamodb:DescribeTable","dynamodb:ConditionCheckItem"],
+    "Resource": [
+      "arn:aws:dynamodb:us-east-1:ACCOUNT_ID:table/*",
+      "arn:aws:dynamodb:us-east-1:ACCOUNT_ID:table/*/index/*"
+    ],
+    "Effect": "Allow"
+  },
+
+  "DynamoDB_Policy_AFTER": {
+    "_note": "REPLACE with — grants access to ONLY the DVSA orders table",
+    "Action": ["dynamodb:GetItem", "dynamodb:Query"],
+    "Resource": [
+      "arn:aws:dynamodb:us-east-1:ACCOUNT_ID:table/DVSA-ORDERS-DB"
+    ],
+    "Effect": "Allow"
+  },
+
+  "SES_Policy_BEFORE": {
+    "_note": "REMOVE — AmazonSESFullAccess managed policy attachment"
+  },
+
+  "SES_Policy_AFTER": {
+    "_note": "REPLACE with this minimal inline policy",
+    "Action": ["ses:SendEmail"],
+    "Resource": ["arn:aws:ses:us-east-1:ACCOUNT_ID:identity/*"],
+    "Effect": "Allow"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "name": "order-manager",
+  "version": "3.0.0",
+  "main": "order-manager.js",
+  "dependencies": {
+    "node-jose": "^2.2.0",
+    "@aws-sdk/client-lambda": "^3.0.0",
+    "@aws-sdk/client-cognito-identity-provider": "^3.0.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "audit": "npm audit"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "_security_notes": {
+    "removed": "node-serialize@0.0.4 — Critical RCE via IIFE (nodesecurity.io/advisories/311, no patch available)",
+    "replacement": "JSON.parse() is used directly for all request body parsing",
+    "scan": "Run `npm audit` after every dependency change to catch new CVEs early"
+  }
+}
